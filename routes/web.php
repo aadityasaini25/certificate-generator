@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CertificateController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DocumentController;
+use App\Http\Controllers\Admin\SubmissionActionController;
+use App\Http\Controllers\Admin\SubmissionController as AdminSubmissionController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\StatusController;
 use App\Http\Controllers\Public\SubmissionController;
@@ -82,8 +87,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->name('logout');
 
     Route::middleware(['auth:admin', 'admin.active'])->group(function () {
-        Route::get('/', function () {
-            return view('admin.dashboard-placeholder');
-        })->name('dashboard');
+        Route::get('/', DashboardController::class)->name('dashboard');
+
+        Route::get('submissions', [AdminSubmissionController::class, 'index'])->name('submissions.index');
+        Route::get('submissions/{id}', [AdminSubmissionController::class, 'show'])->name('submissions.show');
+        Route::get('submissions/{id}/edit', [AdminSubmissionController::class, 'edit'])->name('submissions.edit');
+        Route::put('submissions/{id}', [AdminSubmissionController::class, 'update'])->name('submissions.update');
+
+        Route::post('submissions/{id}/status', [SubmissionActionController::class, 'changeStatus'])->name('submissions.status');
+        Route::post('submissions/{id}/remark', [SubmissionActionController::class, 'addRemark'])->name('submissions.remark');
+        Route::post('submissions/{id}/recover', [SubmissionActionController::class, 'recover'])->name('submissions.recover');
+        Route::post('submissions/{id}/certificate', [CertificateController::class, 'generate'])->name('submissions.certificate');
+
+        // Documents and certificates are addressed by id; the stored path is
+        // read from the database and never taken from the request.
+        Route::get('documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
+        Route::get('certificates/{id}', [CertificateController::class, 'show'])->name('certificates.show');
     });
 });
