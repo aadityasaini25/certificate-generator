@@ -24,6 +24,15 @@ class Admin extends Authenticatable
 
     protected $keyType = 'string';
 
+    /**
+     * The schema uses datetime(3) columns, and the previous implementation
+     * wrote milliseconds. Laravel's default format truncates to whole
+     * seconds, which would make rows created in the same second — the two
+     * remarks written by certificate generation, for instance — impossible to
+     * order deterministically.
+     */
+    protected $dateFormat = 'Y-m-d H:i:s.v';
+
     protected $table = 'admins';
 
     /** The existing schema names these camelCase, not created_at/updated_at. */
