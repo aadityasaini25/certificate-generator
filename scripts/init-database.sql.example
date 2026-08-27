@@ -1,0 +1,31 @@
+-- ---------------------------------------------------------------------------
+-- Certificate — database bootstrap
+--
+-- Run once per environment as a MySQL administrator:
+--     mysql -u root -p < scripts/init-database.sql
+--
+-- Creates the application database and a dedicated least-privilege user.
+-- The application never connects as root.
+--
+-- Replace REPLACE_WITH_A_STRONG_PASSWORD with the password from DATABASE_URL.
+-- ---------------------------------------------------------------------------
+
+CREATE DATABASE IF NOT EXISTS `certificate_db`
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+-- Scratch database used by `prisma migrate dev` to verify migrations.
+-- Development only — `prisma migrate deploy` in production never uses one.
+CREATE DATABASE IF NOT EXISTS `certificate_db_shadow`
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+CREATE USER IF NOT EXISTS 'certificate_app'@'localhost'
+  IDENTIFIED BY 'REPLACE_WITH_A_STRONG_PASSWORD';
+
+-- Scoped to these two schemas only: no global privileges, no access to
+-- other databases on the server.
+GRANT ALL PRIVILEGES ON `certificate_db`.*        TO 'certificate_app'@'localhost';
+GRANT ALL PRIVILEGES ON `certificate_db_shadow`.* TO 'certificate_app'@'localhost';
+
+FLUSH PRIVILEGES;
