@@ -23,9 +23,13 @@
 /storage/*.key
 /storage/logs/*
 !/storage/logs/.gitignore
-# NOTE: the pattern must exclude the CONTENTS of cache/data, not the `data`
-# directory itself — git cannot un-ignore a file inside an excluded directory.
+# NOTE: these patterns exclude the CONTENTS of each directory, not the
+# directory itself — git cannot un-ignore a file inside an excluded directory,
+# and the directories must survive a fresh clone for the framework to boot.
 /storage/framework/cache/data/*
+# mPDF writes generated font metrics here on first render. It is derived data
+# that the library recreates on demand, so it must never be committed.
+/storage/framework/cache/mpdf/*
 /storage/framework/sessions/*
 /storage/framework/testing/*
 /storage/framework/views/*
