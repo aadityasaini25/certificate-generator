@@ -26,8 +26,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)->name('home');
 
 Route::get('request', [SubmissionController::class, 'create'])->name('request.create');
+
+// There is no CAPTCHA in front of this endpoint, so the named `submissions`
+// limiter (3/minute and 10/hour per IP, defined in AppServiceProvider) is the
+// only abuse protection on a public form that accepts file uploads. The old
+// throttle:20,1 allowed 1200 uploads an hour from one address.
 Route::post('request', [SubmissionController::class, 'store'])
-    ->middleware('throttle:20,1')
+    ->middleware('throttle:submissions')
     ->name('request.store');
 Route::get('request/submitted', [SubmissionController::class, 'submitted'])->name('request.submitted');
 
