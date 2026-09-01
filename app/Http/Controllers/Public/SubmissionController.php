@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSubmissionRequest;
 use App\Services\DocumentStorage;
 use App\Services\SubmissionCreator;
-use App\Services\TurnstileVerifier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,13 +14,12 @@ use Illuminate\View\View;
 /**
  * The public certificate request form.
  *
- * Nothing that arrives over the wire is trusted: the CAPTCHA is verified and
- * the upload is inspected before anything is written.
+ * Nothing that arrives over the wire is trusted: the upload is inspected
+ * before anything is written.
  */
 class SubmissionController extends Controller
 {
     public function __construct(
-        private readonly TurnstileVerifier $turnstile,
         private readonly DocumentStorage $storage,
         private readonly SubmissionCreator $creator,
     ) {
@@ -31,25 +29,12 @@ class SubmissionController extends Controller
     {
         return view('public.request', [
             'locations' => config('certificate.locations'),
-            'turnstileSiteKey' => config('certificate.turnstile.site_key'),
         ]);
     }
 
     public function store(StoreSubmissionRequest $request): RedirectResponse
     {
-        // 1. CAPTCHA, before any file handling.
-        $captcha = $this->turnstile->verify(
-            $request->input('cf-turnstile-response'),
-            $request->ip()
-        );
-
-        if (! $captcha['success']) {
-            return back()
-                ->withInput($request->except('document'))
-                ->withErrors(['captcha' => $captcha['reason']]);
-        }
-
-        // 2. The document: size, extension and magic bytes.
+        // 1. The document: size, extension and magic bytes.
         $stored = $this->storage->store($request->file('document'));
 
         if (! $stored['ok']) {
@@ -58,7 +43,7 @@ class SubmissionController extends Controller
                 ->withErrors(['document' => $stored['error']]);
         }
 
-        // 3. Persist.
+        // 2. Persist.
         try {
             $submission = $this->creator->create(
                 $request->validated(),

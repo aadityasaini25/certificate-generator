@@ -18,7 +18,6 @@ certificate once a request is approved.
 | Database | MySQL 8.4+ / 9.x |
 | PDF | mPDF |
 | QR | endroid/qr-code |
-| CAPTCHA | Cloudflare Turnstile |
 
 ## Requirements
 
@@ -38,7 +37,7 @@ npm install && npm run build      # compiles Tailwind into public/build/
 
 cp .env.example .env
 php artisan key:generate
-#   then set DB_* , APP_URL, TURNSTILE_* and ORGANISATION_NAME in .env
+#   then set DB_* , APP_URL and ORGANISATION_NAME in .env
 
 php artisan migrate               # no-op on an existing database
 php artisan serve
@@ -83,7 +82,6 @@ storage/certificates/     Generated certificate PDFs (private)
 |---|---|
 | `SubmissionCreator` | Persists a public request (submission + document, one transaction) |
 | `DocumentStorage` | Upload validation (size, extension, **magic bytes**) and path resolution |
-| `TurnstileVerifier` | Server-side CAPTCHA verification, fails closed |
 | `SubmissionWorkflow` | Status transition rules |
 | `CertificateIssuer` | Certificate generation, staged for consistency |
 | `CertificateNumberAllocator` | `CERT-YYYY-NNNNNN` numbering |
@@ -148,7 +146,6 @@ read by the public status query.
 |---|---|
 | `APP_URL` | The QR code encodes `{APP_URL}/verify/{number}`. A certificate is permanent — one issued against the wrong host carries a dead QR forever. |
 | `APP_DEBUG=false`, `APP_ENV=production` | Never expose stack traces. |
-| `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | Development uses Cloudflare's **test keys**, which always return the same verdict. Production refuses submissions while they are set. |
 | `ORGANISATION_NAME` | Until set, every certificate is stamped **ORGANISATION NOT CONFIGURED**. |
 | `PRIVACY_ORGANISATION_NAME`, `PRIVACY_POLICY_URL` | The consent sentence. No URL is invented; it renders as plain text while empty. |
 

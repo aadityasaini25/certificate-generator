@@ -123,24 +123,6 @@
                     @enderror
                 </div>
 
-                {{-- CAPTCHA --}}
-                <div class="space-y-1.5">
-                    @if ($turnstileSiteKey)
-                        <div class="cf-turnstile" data-sitekey="{{ $turnstileSiteKey }}" data-theme="light"></div>
-                        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-                    @else
-                        <div class="flex items-start gap-3 rounded-card border border-line bg-surface-muted px-4 py-3">
-                            <p class="text-sm text-ink-soft">
-                                CAPTCHA is not configured.
-                                <span class="text-ink-muted">Set TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY to enable it. Required before production.</span>
-                            </p>
-                        </div>
-                    @endif
-                    @error('captcha')
-                        <p class="text-sm text-status-danger">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 <div class="flex justify-center pt-1">
                     <x-ui.button type="submit" variant="cta" size="lg" class="min-w-56">Send Your Request</x-ui.button>
                 </div>

@@ -54,22 +54,6 @@ return [
     'status_applicant_name' => env('STATUS_APPLICANT_NAME', 'masked'),
 
     /*
-     * Cloudflare Turnstile. The development values are Cloudflare's published
-     * TEST keys: they call the real siteverify API but always return the same
-     * verdict, so they must never reach production.
-     */
-    'turnstile' => [
-        'site_key' => env('TURNSTILE_SITE_KEY', ''),
-        'secret_key' => env('TURNSTILE_SECRET_KEY', ''),
-        'verify_url' => 'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-        'test_secrets' => [
-            '1x0000000000000000000000000000000AA',
-            '2x0000000000000000000000000000000AA',
-            '3x0000000000000000000000000000000AA',
-        ],
-    ],
-
-    /*
      * Locations offered by the request form. Static because there is no
      * requirement to manage them at runtime; moving this to a table later
      * would not affect anything that reads it.
