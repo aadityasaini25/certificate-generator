@@ -19,11 +19,10 @@
             {{-- No eyebrow label: the heading is the first element, so it has no
                  top margin and sits where the label used to. --}}
             <h1 class="text-3xl font-semibold leading-tight tracking-tight text-white text-balance sm:text-4xl lg:text-5xl">
-                Request a certificate verification
+                Verify Documents Form
             </h1>
             <p class="mt-4 max-w-xl text-base leading-relaxed text-white/80 text-pretty sm:mt-5 sm:text-lg">
-                Complete the form below and upload your document. Our team will review your
-                request and get back to you.
+                Verify branded documents to confirm their authenticity and validity.
             </p>
         </div>
     </div>
