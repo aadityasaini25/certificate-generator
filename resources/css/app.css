@@ -180,16 +180,6 @@
     );
   }
 
-  /* The form card lifts into the hero to tie the two bands together. */
-  .hero-overlap {
-    margin-top: -3rem;
-  }
-
-  @media (min-width: 640px) {
-    .hero-overlap {
-      margin-top: -4rem;
-    }
-  }
 
   /* Upload dropzone. Hides the raw file input's default control while
      keeping it fully operable by keyboard and assistive technology. */

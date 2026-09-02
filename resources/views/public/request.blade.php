@@ -28,8 +28,26 @@
     </div>
 </section>
 
-{{-- The card lifts into the hero so the two bands read as one unit. --}}
-<div class="hero-overlap relative z-10 mx-auto w-full max-w-3xl px-4 pb-16 sm:px-6 lg:pb-20">
+{{--
+    Informational text between the hero and the form. Sits on the page
+    background, not inside the form card, and shares the form's max-w-3xl so
+    the two columns line up.
+--}}
+<section class="mx-auto w-full max-w-3xl px-4 pt-12 pb-2 sm:px-6 sm:pt-16 sm:pb-4">
+    <p class="text-base leading-relaxed text-ink-soft text-pretty">
+        We offer customers various certificates and reports to confirm the results of our
+        testing, inspection and certification. We also provide a free service to verify
+        documents, ensuring they are genuine before you rely on them for any purpose.
+    </p>
+    <p class="mt-5 text-base italic leading-relaxed text-ink-soft text-pretty">
+        To use our document verification service, please complete the form and attach the
+        document(s) for verification.
+    </p>
+</section>
+
+{{-- No hero-overlap: the informational section now sits between the hero and
+     the card, so a negative margin here would pull the form over that text. --}}
+<div class="mx-auto w-full max-w-3xl px-4 pt-8 pb-16 sm:px-6 sm:pt-10 lg:pb-20">
     <x-ui.card class="shadow-overlay">
         <x-ui.card-body class="sm:px-8 sm:py-9">
             <form method="POST" action="{{ route('request.store') }}" enctype="multipart/form-data"
