@@ -154,7 +154,7 @@
     isolation: isolate;
     overflow: hidden;
     /* Neutral, not brand navy: a coloured fallback tints the photograph. */
-    background-color: #0d0e11;
+    background-color: #2b2f35;
     /* The image itself is set inline in the Blade via asset(), not here: a
        root-absolute url() would resolve against the domain root and miss the
        /certificate subdirectory the app is mounted under. */
@@ -173,11 +173,11 @@
        the band instead of dimmed everywhere. */
     background: linear-gradient(
       to top,
-      rgb(13 14 17 / 0.78) 0%,
-      rgb(13 14 17 / 0.55) 22%,
-      rgb(13 14 17 / 0.22) 50%,
-      rgb(13 14 17 / 0.04) 78%,
-      rgb(13 14 17 / 0) 100%
+      rgb(58 62 69 / 0.78) 0%,
+      rgb(58 62 69 / 0.55) 22%,
+      rgb(58 62 69 / 0.22) 50%,
+      rgb(58 62 69 / 0.04) 78%,
+      rgb(58 62 69 / 0) 100%
     );
   }
 

@@ -12,7 +12,7 @@
     The photograph is served from public/images, not a remote host, so this
     page still makes zero external requests.
 --}}
-<section class="page-hero flex min-h-[320px] items-end sm:min-h-[335px] lg:min-h-[345px]"
+<section class="page-hero flex min-h-[365px] items-end sm:min-h-[385px] lg:min-h-[410px]"
          style="background-image: url('{{ asset('images/hero-certificate.jpg') }}')">
     {{-- items-end pins the copy to the bottom of the band; min-height keeps the
          band the height it had when the text sat in the middle. --}}
