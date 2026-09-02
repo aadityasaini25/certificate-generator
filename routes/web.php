@@ -23,7 +23,13 @@ use Illuminate\Support\Facades\Route;
 | certificate number (CERT-...). They share no lookup path.
 */
 
-Route::get('/', HomeController::class)->name('home');
+// The landing page is no longer the entry point: /certificate/ goes straight
+// to the application form. HomeController and the public.home view are left in
+// place (imported but unrouted) so restoring the landing page is a one-line
+// revert. The `home` name is kept because partials/site-header.blade.php calls
+// route('home') for the logo and nav link. 302, not 301, so browsers do not
+// cache the redirect permanently.
+Route::get('/', fn () => redirect()->route('request.create'))->name('home');
 
 Route::get('request', [SubmissionController::class, 'create'])->name('request.create');
 
