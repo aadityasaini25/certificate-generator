@@ -153,7 +153,8 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    background-color: var(--color-brand-950);
+    /* Neutral, not brand navy: a coloured fallback tints the photograph. */
+    background-color: #0d0e11;
     /* The image itself is set inline in the Blade via asset(), not here: a
        root-absolute url() would resolve against the domain root and miss the
        /certificate subdirectory the app is mounted under. */
@@ -167,13 +168,15 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    /* Heavier on the left, where the copy sits. */
+    /* Neutral greyscale, so the photograph keeps its own colour instead
+       of being tinted blue. Heavier on the left, where the copy sits; it
+       only has to buy text contrast, not recolour the image. */
     background: linear-gradient(
       100deg,
-      rgb(11 18 48 / 0.92) 0%,
-      rgb(11 18 48 / 0.78) 38%,
-      rgb(20 28 87 / 0.46) 72%,
-      rgb(26 44 143 / 0.30) 100%
+      rgb(13 14 17 / 0.86) 0%,
+      rgb(13 14 17 / 0.70) 40%,
+      rgb(13 14 17 / 0.40) 72%,
+      rgb(13 14 17 / 0.24) 100%
     );
   }
 
