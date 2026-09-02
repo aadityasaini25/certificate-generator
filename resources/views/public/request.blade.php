@@ -3,23 +3,38 @@
 @section('title', 'Request a certificate verification · ' . config('certificate.app_name'))
 
 @section('content')
-<div class="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
-    <header class="mb-8">
-        <h1 class="text-3xl font-semibold tracking-tight text-ink text-balance sm:text-4xl">
-            Request a certificate verification
-        </h1>
-        <p class="mt-3 text-ink-soft text-pretty">
-            Complete the form below and upload your document. Our team will review your request and get back to you.
-        </p>
-        <p class="mt-4 text-sm text-ink-muted">
-            Fields marked with <span class="text-status-danger" aria-hidden="true">*</span><span class="sr-only">an asterisk</span> are required.
-        </p>
-    </header>
 
-    <x-ui.card>
-        <x-ui.card-body class="sm:px-8 sm:py-8">
+{{--
+    Hero band. Full-bleed by design: layouts.public yields straight into
+    <main> with no container, so the section sets its own gutters and they
+    line up with the site header's max-w-6xl.
+
+    The artwork is a local SVG (public/images/hero-certificate.svg), not a
+    remote image, so this page still makes zero external requests.
+--}}
+<section class="page-hero">
+    <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-14 sm:px-6 sm:pb-28 sm:pt-20 lg:px-8 lg:pb-32 lg:pt-24">
+        <div class="max-w-2xl">
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+                {{ config('certificate.app_name') }}
+            </p>
+            <h1 class="mt-3 text-3xl font-semibold leading-tight tracking-tight text-white text-balance sm:text-4xl lg:text-5xl">
+                Request a certificate verification
+            </h1>
+            <p class="mt-4 max-w-xl text-base leading-relaxed text-white/80 text-pretty sm:mt-5 sm:text-lg">
+                Complete the form below and upload your document. Our team will review your
+                request and get back to you.
+            </p>
+        </div>
+    </div>
+</section>
+
+{{-- The card lifts into the hero so the two bands read as one unit. --}}
+<div class="hero-overlap relative z-10 mx-auto w-full max-w-3xl px-4 pb-16 sm:px-6 lg:pb-20">
+    <x-ui.card class="shadow-overlay">
+        <x-ui.card-body class="sm:px-8 sm:py-9">
             <form method="POST" action="{{ route('request.store') }}" enctype="multipart/form-data"
-                  class="space-y-7" novalidate>
+                  class="space-y-9" novalidate>
                 @csrf
 
                 @if ($errors->any())
@@ -29,105 +44,182 @@
                     </div>
                 @endif
 
-                <div class="grid gap-5 sm:grid-cols-2">
-                    <x-ui.field name="firstName" label="First Name" required autocomplete="given-name" />
-                    <x-ui.field name="lastName" label="Last Name" required autocomplete="family-name" />
-                </div>
+                <p class="text-sm text-ink-muted">
+                    Fields marked with <span class="text-status-danger" aria-hidden="true">*</span><span class="sr-only">an asterisk</span> are required.
+                </p>
 
-                <x-ui.field name="email" label="Email" type="email" required autocomplete="email" inputmode="email" />
+                {{-- ---------------------------------------------------------
+                     Section 1 — applicant details.
+                     Grouping is presentational only: every field keeps its
+                     original name, order and validation.
+                --------------------------------------------------------- --}}
+                <section class="space-y-5">
+                    <h2 class="form-section-title">Your details</h2>
 
-                <div class="grid gap-5 sm:grid-cols-2">
-                    <x-ui.field name="companyName" label="Company Name" autocomplete="organization" />
-                    <x-ui.field name="jobTitle" label="Job Title" autocomplete="organization-title" />
-                </div>
-
-                {{-- Location --}}
-                <div class="space-y-1.5">
-                    <label for="location" class="block text-sm font-medium text-ink">
-                        Location<span class="ml-0.5 text-status-danger" aria-hidden="true">*</span>
-                        <span class="sr-only">(required)</span>
-                    </label>
-                    <div class="relative">
-                        <select id="location" name="location" class="field-control appearance-none pr-10"
-                                @if ($errors->has('location')) aria-invalid="true" aria-describedby="location-error" @endif>
-                            <option value="">Please select</option>
-                            @foreach ($locations as $location)
-                                <option value="{{ $location }}" @selected(old('location') === $location)>{{ $location }}</option>
-                            @endforeach
-                        </select>
-                        <svg class="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-ink-muted"
-                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="m6 9 6 6 6-6"/>
-                        </svg>
-                    </div>
-                    @error('location')
-                        <p id="location-error" class="text-sm text-status-danger">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                {{-- Comments --}}
-                <div class="space-y-1.5">
-                    <label for="comments" class="block text-sm font-medium text-ink">Comments</label>
-                    <textarea id="comments" name="comments" rows="6" class="field-control resize-y"
-                              @if ($errors->has('comments')) aria-invalid="true" @endif>{{ old('comments') }}</textarea>
-                    @error('comments')
-                        <p class="text-sm text-status-danger">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                {{-- Document --}}
-                <div class="space-y-2">
-                    <label for="document" class="block text-sm font-medium text-ink">
-                        Upload your document(s) for verification<span class="ml-0.5 text-status-danger" aria-hidden="true">*</span>
-                        <span class="sr-only">(required)</span>
-                    </label>
-
-                    <div class="rounded-card border-2 border-dashed {{ $errors->has('document') ? 'border-status-danger bg-status-danger-bg' : 'border-line-strong bg-surface-muted' }} px-6 py-8 text-center">
-                        <input id="document" name="document" type="file"
-                               accept="{{ config('certificate.uploads.accept_attribute') }}"
-                               class="mx-auto block w-full max-w-sm text-sm text-ink-soft file:mr-3 file:rounded-control file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-brand-700"
-                               @if ($errors->has('document')) aria-invalid="true" aria-describedby="document-error" @endif>
-                        <p class="mt-2 text-xs text-ink-muted">PDF or ZIP</p>
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <x-ui.field name="firstName" label="First Name" required autocomplete="given-name" />
+                        <x-ui.field name="lastName" label="Last Name" required autocomplete="family-name" />
                     </div>
 
-                    <p class="text-xs leading-relaxed text-ink-muted">
-                        {{ config('certificate.uploads.help_text') }}
-                    </p>
-                    @error('document')
-                        <p id="document-error" class="text-sm text-status-danger">{{ $message }}</p>
-                    @enderror
-                </div>
+                    <x-ui.field name="email" label="Email" type="email" required autocomplete="email" inputmode="email" />
 
-                {{-- Privacy consent --}}
-                <div class="space-y-1.5">
-                    <div class="flex items-start gap-3">
-                        <input id="privacyConsent" name="privacyConsent" type="checkbox" value="1"
-                               @checked(old('privacyConsent'))
-                               class="mt-0.5 size-4 shrink-0 rounded border-line-strong accent-brand-600"
-                               @if ($errors->has('privacyConsent')) aria-invalid="true" @endif>
-                        <label for="privacyConsent" class="text-sm leading-relaxed text-ink-soft">
-                            I agree that {{ config('certificate.privacy.organisation_name') }} can use my data for the
-                            purposes of dealing with my request, in accordance with the
-                            @if (config('certificate.privacy.policy_url'))
-                                <a href="{{ config('certificate.privacy.policy_url') }}" target="_blank" rel="noopener noreferrer"
-                                   class="font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800">{{ config('certificate.privacy.organisation_name') }} Online Privacy Statement</a>
-                            @else
-                                {{-- No URL is invented: it renders as plain text until one is configured. --}}
-                                <span class="font-medium text-ink">{{ config('certificate.privacy.organisation_name') }} Online Privacy Statement</span>
-                            @endif.
-                            <span class="ml-0.5 text-status-danger" aria-hidden="true">*</span>
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <x-ui.field name="companyName" label="Company Name" autocomplete="organization" />
+                        <x-ui.field name="jobTitle" label="Job Title" autocomplete="organization-title" />
+                    </div>
+
+                    {{-- Location --}}
+                    <div class="space-y-1.5">
+                        <label for="location" class="block text-sm font-medium text-ink">
+                            Location<span class="ml-0.5 text-status-danger" aria-hidden="true">*</span>
+                            <span class="sr-only">(required)</span>
                         </label>
+                        <div class="relative">
+                            <select id="location" name="location" class="field-control appearance-none pr-10"
+                                    @if ($errors->has('location')) aria-invalid="true" aria-describedby="location-error" @endif>
+                                <option value="">Please select</option>
+                                @foreach ($locations as $location)
+                                    <option value="{{ $location }}" @selected(old('location') === $location)>{{ $location }}</option>
+                                @endforeach
+                            </select>
+                            <svg class="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-ink-muted"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="m6 9 6 6 6-6"/>
+                            </svg>
+                        </div>
+                        @error('location')
+                            <p id="location-error" class="text-sm text-status-danger">{{ $message }}</p>
+                        @enderror
                     </div>
-                    @error('privacyConsent')
-                        <p class="text-sm text-status-danger">{{ $message }}</p>
-                    @enderror
-                </div>
+                </section>
 
-                <div class="flex justify-center pt-1">
-                    <x-ui.button type="submit" variant="cta" size="lg" class="min-w-56">Send Your Request</x-ui.button>
+                {{-- ---------------------------------------------------------
+                     Section 2 — the request itself.
+                --------------------------------------------------------- --}}
+                <section class="space-y-5">
+                    <h2 class="form-section-title">Your request</h2>
+
+                    {{-- Comments --}}
+                    <div class="space-y-1.5">
+                        <label for="comments" class="block text-sm font-medium text-ink">Comments</label>
+                        <textarea id="comments" name="comments" rows="5" class="field-control resize-y"
+                                  @if ($errors->has('comments')) aria-invalid="true" @endif>{{ old('comments') }}</textarea>
+                        @error('comments')
+                            <p class="text-sm text-status-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Document --}}
+                    <div class="space-y-2">
+                        <label for="document" class="block text-sm font-medium text-ink">
+                            Upload your document(s) for verification<span class="ml-0.5 text-status-danger" aria-hidden="true">*</span>
+                            <span class="sr-only">(required)</span>
+                        </label>
+
+                        {{--
+                            The input covers the whole panel at zero opacity, so the
+                            entire area is clickable while the control stays a real
+                            file input: keyboard focus, the label's `for`, and form
+                            submission are all unchanged. With JavaScript disabled
+                            the picker still opens; only the filename readout below
+                            stops updating.
+                        --}}
+                        <div class="dropzone px-6 py-9 text-center" data-invalid="{{ $errors->has('document') ? 'true' : 'false' }}">
+                            <input id="document" name="document" type="file"
+                                   accept="{{ config('certificate.uploads.accept_attribute') }}"
+                                   data-upload-input
+                                   @if ($errors->has('document')) aria-invalid="true" aria-describedby="document-error" @endif>
+
+                            <svg class="mx-auto size-9 text-ink-muted" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round" aria-hidden="true">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <path d="M14 2v6h6"/>
+                                <path d="M12 18v-6"/>
+                                <path d="m9 15 3-3 3 3"/>
+                            </svg>
+
+                            <p class="mt-3 text-sm font-medium text-ink">
+                                <span class="text-brand-700 underline underline-offset-4">Choose a file</span>
+                                <span class="text-ink-soft">or drag it here</span>
+                            </p>
+                            <p class="mt-1 text-xs text-ink-muted">PDF or ZIP</p>
+                            <p class="mt-3 text-sm font-medium text-brand-800" data-upload-name hidden></p>
+                        </div>
+
+                        <p class="text-xs leading-relaxed text-ink-muted">
+                            {{ config('certificate.uploads.help_text') }}
+                        </p>
+                        @error('document')
+                            <p id="document-error" class="text-sm text-status-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </section>
+
+                {{-- ---------------------------------------------------------
+                     Section 3 — consent.
+                --------------------------------------------------------- --}}
+                <section class="space-y-5">
+                    <h2 class="form-section-title">Consent</h2>
+
+                    <div class="space-y-1.5">
+                        <div class="flex items-start gap-3 rounded-card bg-surface-muted px-4 py-3.5">
+                            <input id="privacyConsent" name="privacyConsent" type="checkbox" value="1"
+                                   @checked(old('privacyConsent'))
+                                   class="mt-0.5 size-4 shrink-0 rounded border-line-strong accent-brand-600"
+                                   @if ($errors->has('privacyConsent')) aria-invalid="true" @endif>
+                            @php
+                                $privacyOrg = config('certificate.privacy.organisation_name');
+                                $privacyUrl = config('certificate.privacy.policy_url');
+                            @endphp
+                            <label for="privacyConsent" class="text-sm leading-relaxed text-ink-soft">
+                                I agree that {{ $privacyOrg }} can use my data for the purposes of dealing
+                                with my request, in accordance with the
+                                {{-- Directives sit flush against the tags: any whitespace here lands
+                                     between the link text and the full stop. No URL is invented, so
+                                     this renders as plain text until one is configured. --}}
+                                @if ($privacyUrl)<a href="{{ $privacyUrl }}" target="_blank" rel="noopener noreferrer" class="font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800">{{ $privacyOrg }} Online Privacy Statement</a>@else<span class="font-medium text-ink">{{ $privacyOrg }} Online Privacy Statement</span>@endif.<span class="ml-0.5 text-status-danger" aria-hidden="true">*</span>
+                            </label>
+                        </div>
+                        @error('privacyConsent')
+                            <p class="text-sm text-status-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </section>
+
+                <div class="border-t border-line pt-7">
+                    {{-- The button is inline-flex, so mx-auto cannot centre it; the
+                         flex wrapper does. Full width on mobile, hugged on desktop. --}}
+                    <div class="sm:flex sm:justify-center">
+                        <x-ui.button type="submit" variant="cta" size="lg" class="w-full sm:w-auto sm:min-w-64">
+                            Send Your Request
+                        </x-ui.button>
+                    </div>
+                    <p class="mt-3 text-center text-xs text-ink-muted">
+                        You will receive a reference number to track your request.
+                    </p>
                 </div>
             </form>
         </x-ui.card-body>
     </x-ui.card>
 </div>
+
+{{-- Shows which file was picked, since the native control is visually hidden. --}}
+<script>
+    (function () {
+        var input = document.querySelector('[data-upload-input]');
+        var label = document.querySelector('[data-upload-name]');
+        if (!input || !label) return;
+        input.addEventListener('change', function () {
+            var file = input.files && input.files[0];
+            if (file) {
+                label.textContent = file.name;
+                label.hidden = false;
+            } else {
+                label.textContent = '';
+                label.hidden = true;
+            }
+        });
+    })();
+</script>
 @endsection

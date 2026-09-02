@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="">
+  <title>Abstract certificate documents</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0"   stop-color="#0b1230"/>
+      <stop offset="0.55" stop-color="#141c57"/>
+      <stop offset="1"   stop-color="#1a2c8f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.74" cy="0.22" r="0.62">
+      <stop offset="0" stop-color="#3366ff" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#3366ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sheet" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.05"/>
+    </linearGradient>
+    <pattern id="guilloche" width="26" height="26" patternUnits="userSpaceOnUse" patternTransform="rotate(34)">
+      <line x1="0" y1="0" x2="0" y2="26" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="600" fill="url(#bg)"/>
+  <rect width="1600" height="600" fill="url(#guilloche)"/>
+  <rect width="1600" height="600" fill="url(#glow)"/>
+
+  <!-- Stacked certificate sheets, weighted to the right so left-aligned copy stays clear -->
+  <g transform="translate(1015 300)">
+    <g transform="rotate(-13)" opacity="0.55">
+      <rect x="-150" y="-205" width="300" height="410" rx="10" fill="url(#sheet)" stroke="#ffffff" stroke-opacity="0.20"/>
+    </g>
+    <g transform="rotate(-5)" opacity="0.75">
+      <rect x="-155" y="-210" width="310" height="420" rx="10" fill="url(#sheet)" stroke="#ffffff" stroke-opacity="0.26"/>
+    </g>
+    <g transform="rotate(3)">
+      <rect x="-160" y="-215" width="320" height="430" rx="12" fill="url(#sheet)" stroke="#ffffff" stroke-opacity="0.34"/>
+      <!-- ruled text lines -->
+      <g fill="#ffffff" fill-opacity="0.30">
+        <rect x="-112" y="-160" width="150" height="11" rx="5.5"/>
+        <rect x="-112" y="-128" width="224" height="8"  rx="4"/>
+        <rect x="-112" y="-106" width="200" height="8"  rx="4"/>
+        <rect x="-112" y="-84"  width="215" height="8"  rx="4"/>
+        <rect x="-112" y="-52"  width="120" height="8"  rx="4"/>
+      </g>
+      <!-- seal -->
+      <g transform="translate(0 96)">
+        <circle r="58" fill="none" stroke="#ffffff" stroke-opacity="0.42" stroke-width="2"/>
+        <circle r="47" fill="none" stroke="#ffffff" stroke-opacity="0.26" stroke-width="1"/>
+        <circle r="36" fill="#ffffff" fill-opacity="0.10"/>
+        <path d="M-15 2 l10 11 l21 -23" fill="none" stroke="#ffffff" stroke-opacity="0.80"
+              stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <g stroke="#ffffff" stroke-opacity="0.30" stroke-width="2" stroke-linecap="round">
+          <line x1="-20" y1="58" x2="-30" y2="104"/>
+          <line x1="20"  y1="58" x2="30"  y2="104"/>
+          <line x1="-30" y1="104" x2="0" y2="88"/>
+          <line x1="30"  y1="104" x2="0" y2="88"/>
+        </g>
+      </g>
+      <g fill="#ffffff" fill-opacity="0.22">
+        <rect x="-70" y="180" width="140" height="7" rx="3.5"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- faint corner rosette for depth -->
+  <g transform="translate(210 470)" opacity="0.16" fill="none" stroke="#ffffff" stroke-width="1.5">
+    <circle r="120"/><circle r="92"/><circle r="64"/>
+  </g>
+</svg>

@@ -138,34 +138,100 @@
 }
 
 @layer components {
-  /* One definition for every text-like form control, so inputs, selects and
-     textareas cannot drift apart visually. */
-  .field-control {
-    width: 100%;
-    border-radius: var(--radius-control);
-    border: 1px solid var(--color-line-strong);
-    background-color: var(--color-surface);
-    padding: 0.625rem 0.75rem;
-    font-size: 0.9375rem;
-    color: var(--color-ink);
-    transition: border-color 150ms, box-shadow 150ms;
+  /* ---------------------------------------------------------------------
+     Public page hero.
+
+     The artwork is a local SVG, not a remote image: the public pages make
+     zero external requests, which is what keeps them reachable on networks
+     that filter third-party hosts.
+
+     The scrim is a separate layer rather than a filter on the image so the
+     text contrast does not depend on which part of the artwork a given
+     viewport happens to crop to.
+  --------------------------------------------------------------------- */
+  .page-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background-color: var(--color-brand-950);
+    background-image: url("/images/hero-certificate.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
-  .field-control::placeholder {
+  .page-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    /* Heavier on the left, where the copy sits. */
+    background: linear-gradient(
+      100deg,
+      rgb(11 18 48 / 0.92) 0%,
+      rgb(11 18 48 / 0.78) 38%,
+      rgb(20 28 87 / 0.46) 72%,
+      rgb(26 44 143 / 0.30) 100%
+    );
+  }
+
+  /* The form card lifts into the hero to tie the two bands together. */
+  .hero-overlap {
+    margin-top: -3rem;
+  }
+
+  @media (min-width: 640px) {
+    .hero-overlap {
+      margin-top: -4rem;
+    }
+  }
+
+  /* Upload dropzone. Hides the raw file input's default control while
+     keeping it fully operable by keyboard and assistive technology. */
+  .dropzone {
+    position: relative;
+    border-radius: var(--radius-card);
+    border: 2px dashed var(--color-line-strong);
+    background-color: var(--color-surface-muted);
+    transition: border-color 150ms, background-color 150ms;
+  }
+
+  .dropzone:hover,
+  .dropzone:focus-within {
+    border-color: var(--color-brand-500);
+    background-color: var(--color-brand-50);
+  }
+
+  .dropzone[data-invalid="true"] {
+    border-color: var(--color-status-danger);
+    background-color: var(--color-status-danger-bg);
+  }
+
+  .dropzone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  /* Section heading inside the form card. */
+  .form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--color-ink-muted);
   }
 
-  .field-control:hover:not(:disabled, [aria-invalid="true"]) {
-    border-color: var(--color-ink-muted);
-  }
-
-  .field-control:disabled {
-    background-color: var(--color-surface-muted);
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-
-  .field-control[aria-invalid="true"] {
-    border-color: var(--color-status-danger);
+  .form-section-title::after {
+    content: "";
+    flex: 1 1 auto;
+    height: 1px;
+    background-color: var(--color-line);
   }
 }
