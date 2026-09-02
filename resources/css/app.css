@@ -154,7 +154,9 @@
     isolation: isolate;
     overflow: hidden;
     background-color: var(--color-brand-950);
-    background-image: url("/images/hero-certificate.svg");
+    /* The image itself is set inline in the Blade via asset(), not here: a
+       root-absolute url() would resolve against the domain root and miss the
+       /certificate subdirectory the app is mounted under. */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
