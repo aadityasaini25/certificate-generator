@@ -168,15 +168,16 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    /* Neutral greyscale, so the photograph keeps its own colour instead
-       of being tinted blue. Heavier on the left, where the copy sits; it
-       only has to buy text contrast, not recolour the image. */
+    /* Dark only along the bottom, where the copy sits, fading to nothing
+       by mid-height. The photograph is therefore unshaded across most of
+       the band instead of dimmed everywhere. */
     background: linear-gradient(
-      100deg,
-      rgb(13 14 17 / 0.86) 0%,
-      rgb(13 14 17 / 0.70) 40%,
-      rgb(13 14 17 / 0.40) 72%,
-      rgb(13 14 17 / 0.24) 100%
+      to top,
+      rgb(13 14 17 / 0.78) 0%,
+      rgb(13 14 17 / 0.55) 22%,
+      rgb(13 14 17 / 0.22) 50%,
+      rgb(13 14 17 / 0.04) 78%,
+      rgb(13 14 17 / 0) 100%
     );
   }
 

@@ -12,9 +12,11 @@
     The photograph is served from public/images, not a remote host, so this
     page still makes zero external requests.
 --}}
-<section class="page-hero"
+<section class="page-hero flex min-h-[320px] items-end sm:min-h-[335px] lg:min-h-[345px]"
          style="background-image: url('{{ asset('images/hero-certificate.jpg') }}')">
-    <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-14 sm:px-6 sm:pb-28 sm:pt-20 lg:px-8 lg:pb-32 lg:pt-24">
+    {{-- items-end pins the copy to the bottom of the band; min-height keeps the
+         band the height it had when the text sat in the middle. --}}
+    <div class="mx-auto w-full max-w-6xl px-4 pb-10 pt-20 sm:px-6 sm:pb-12 sm:pt-24 lg:px-8 lg:pb-14">
         <div class="max-w-2xl">
             {{-- No eyebrow label: the heading is the first element, so it has no
                  top margin and sits where the label used to. --}}
