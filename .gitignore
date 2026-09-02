@@ -46,3 +46,9 @@
 npm-debug.log*
 .DS_Store
 *.pem
+
+# Laravel regenerates these on boot and they encode which packages are
+# INSTALLED, not which are required. Committing them shipped a dev-only
+# provider (laravel/pail) into production, where composer install --no-dev
+# leaves it absent, and the app died at boot on every deploy.
+/bootstrap/cache/*.php
