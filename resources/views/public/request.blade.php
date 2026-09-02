@@ -16,10 +16,9 @@
          style="background-image: url('{{ asset('images/hero-certificate.jpg') }}')">
     <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-14 sm:px-6 sm:pb-28 sm:pt-20 lg:px-8 lg:pb-32 lg:pt-24">
         <div class="max-w-2xl">
-            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
-                {{ config('certificate.app_name') }}
-            </p>
-            <h1 class="mt-3 text-3xl font-semibold leading-tight tracking-tight text-white text-balance sm:text-4xl lg:text-5xl">
+            {{-- No eyebrow label: the heading is the first element, so it has no
+                 top margin and sits where the label used to. --}}
+            <h1 class="text-3xl font-semibold leading-tight tracking-tight text-white text-balance sm:text-4xl lg:text-5xl">
                 Request a certificate verification
             </h1>
             <p class="mt-4 max-w-xl text-base leading-relaxed text-white/80 text-pretty sm:mt-5 sm:text-lg">
