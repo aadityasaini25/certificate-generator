@@ -9,11 +9,11 @@
     <main> with no container, so the section sets its own gutters and they
     line up with the site header's max-w-6xl.
 
-    The artwork is a local SVG (public/images/hero-certificate.svg), not a
-    remote image, so this page still makes zero external requests.
+    The photograph is served from public/images, not a remote host, so this
+    page still makes zero external requests.
 --}}
 <section class="page-hero"
-         style="background-image: url('{{ asset('images/hero-certificate.svg') }}')">
+         style="background-image: url('{{ asset('images/hero-certificate.jpg') }}')">
     <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-14 sm:px-6 sm:pb-28 sm:pt-20 lg:px-8 lg:pb-32 lg:pt-24">
         <div class="max-w-2xl">
             <p class="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
