@@ -163,6 +163,22 @@
     background-repeat: no-repeat;
   }
 
+  /* Blurred copy of the photograph sitting above the sharp one the section
+     paints, so only the backdrop softens -- a filter on .page-hero itself
+     would blur the heading too. background-image: inherit picks up the URL
+     set inline in the Blade; the negative inset hides the blurred edges. */
+  .page-hero::before {
+    content: "";
+    position: absolute;
+    inset: -12px;
+    z-index: -2;
+    background-image: inherit;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(3px);
+  }
+
   .page-hero::after {
     content: "";
     position: absolute;
